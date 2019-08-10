@@ -27,6 +27,9 @@ public class BitcoinPriceServiceImpl implements BitcoinPriceService {
 		logger.debug("Fetching currency data for startDate={},endDate={},currency={}",start,end,targetCurrency);
 		Currency currency;
 		List<Price> prices;
+		int highestIndex =0;
+		double highest =0;
+		int index =0;
 		try {
 			currency = bitcoinPriceRepository.getCurrency(targetCurrency);
 			prices = bitcoinPriceRepository.getPrice(start, end);
@@ -35,9 +38,18 @@ public class BitcoinPriceServiceImpl implements BitcoinPriceService {
 			throw e;
 		}
 		double conversionRate = currency.getTarget() / currency.getUsd();
-		prices.forEach(p -> {
-			p.setPrice(p.getPrice() * conversionRate);
-		});
+		for(Price p:prices){
+			double price = Double.parseDouble(p.getPrice().toString())*conversionRate;
+			p.setPrice(price);
+			if(price>highest){
+				highestIndex=index;
+				highest=price;
+			}
+			index++;
+		}
+		Price highestPrice = prices.get(highestIndex);
+		highestPrice.setPrice(highestPrice.getPrice()+"(highest)");
+		prices.set(highestIndex, highestPrice);
 		Response response = new Response();
 		response.setCurrency(targetCurrency);
 		response.setStartDate(start);

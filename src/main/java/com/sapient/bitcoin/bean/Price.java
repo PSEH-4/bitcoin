@@ -2,9 +2,9 @@ package com.sapient.bitcoin.bean;
 
 public class Price {
 	private String date;
-	private double price;
+	private Object price;
 
-	public Price(String date, double price) {
+	public Price(String date, Object price) {
 		this.date = date;
 		this.price = price;
 	}
@@ -17,11 +17,11 @@ public class Price {
 		this.date = date;
 	}
 
-	public double getPrice() {
+	public Object getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(Object price) {
 		this.price = price;
 	}
 
