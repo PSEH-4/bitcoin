@@ -44,7 +44,8 @@ public class BitcoinServiceTest {
 
 		Response returned = priceServiceImpl.fetchPrice("2019-08-01",
 				"2019-08-10", "INR");
-		Assert.assertEquals(700.0, returned.getPrices().get(0).getPrice());
+		Assert.assertEquals("700.0", returned.getPrices().get(0).getPrice());
+		
 
 	}
 

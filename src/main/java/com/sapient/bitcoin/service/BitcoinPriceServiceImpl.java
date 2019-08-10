@@ -40,7 +40,7 @@ public class BitcoinPriceServiceImpl implements BitcoinPriceService {
 		double conversionRate = currency.getTarget() / currency.getUsd();
 		for(Price p:prices){
 			double price = Double.parseDouble(p.getPrice().toString())*conversionRate;
-			p.setPrice(p.getPrice());
+			p.setPrice(Double.toString(price));
 			if(price>highest){
 				highestIndex=index;
 				highest=price;
