@@ -25,4 +25,9 @@ public class Price {
 		this.price = price;
 	}
 
+	@Override
+	public String toString() {
+		return "Price [date=" + date + ", price=" + price + "]";
+	}
+
 }

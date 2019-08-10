@@ -15,9 +15,9 @@ import com.sapient.bitcoin.repository.BitcoinPriceRepository;
 import com.sapient.bitcoin.repository.BitcoinRepositoryRestImpl;
 
 @Service
-public class BitcoinPriveServiceImpl implements BitcoinPriceService {
+public class BitcoinPriceServiceImpl implements BitcoinPriceService {
 	
-	Logger logger = LoggerFactory.getLogger(BitcoinPriveServiceImpl.class);
+	Logger logger = LoggerFactory.getLogger(BitcoinPriceServiceImpl.class);
 
 	@Autowired
 	private BitcoinPriceRepository bitcoinPriceRepository;
