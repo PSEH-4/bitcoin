@@ -31,6 +31,7 @@ public class BitcoinServiceTest {
 
 		List<Price> prices = new ArrayList<>();
 		prices.add(new Price("2019-08-1", 10));
+		prices.add(new Price("2019-08-1", 20));
 		Response response = new Response();
 		response.setPrices(prices);
 		Currency currency = new Currency(1, 70);
