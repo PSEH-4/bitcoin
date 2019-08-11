@@ -11,7 +11,7 @@ import com.sapient.bitcoin.bean.Currency;
 import com.sapient.bitcoin.bean.Price;
 import com.sapient.bitcoin.bean.Request;
 import com.sapient.bitcoin.bean.Response;
-import com.sapient.bitcoin.repository.BitcoinApiException;
+import com.sapient.bitcoin.exception.BitcoinApiException;
 import com.sapient.bitcoin.repository.BitcoinPriceRepository;
 
 @Service

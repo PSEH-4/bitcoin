@@ -1,4 +1,4 @@
-package com.sapient.bitcoin.bean;
+package com.sapient.bitcoin.exception;
 
 public class Error {
 

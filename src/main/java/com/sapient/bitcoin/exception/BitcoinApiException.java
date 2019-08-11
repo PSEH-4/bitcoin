@@ -1,4 +1,4 @@
-package com.sapient.bitcoin.repository;
+package com.sapient.bitcoin.exception;
 
 public class BitcoinApiException extends RuntimeException {
 

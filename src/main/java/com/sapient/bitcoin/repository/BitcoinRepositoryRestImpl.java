@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sapient.bitcoin.Configuration;
 import com.sapient.bitcoin.bean.Currency;
 import com.sapient.bitcoin.bean.Price;
+import com.sapient.bitcoin.exception.BitcoinApiException;
 
 @Component
 public class BitcoinRepositoryRestImpl implements BitcoinPriceRepository {
@@ -22,10 +23,10 @@ public class BitcoinRepositoryRestImpl implements BitcoinPriceRepository {
 	Logger logger = LoggerFactory.getLogger(BitcoinRepositoryRestImpl.class);
 
 	@Autowired
-	private RestTemplate restTemplate = new RestTemplate();
+	private RestTemplate restTemplate;
 
 	@Autowired
-	private Configuration configuration = new Configuration();
+	private Configuration configuration;
 
 	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();;
 
@@ -53,7 +54,7 @@ public class BitcoinRepositoryRestImpl implements BitcoinPriceRepository {
 
 	@Override
 	public List<Price> getPrice(String start, String end) {
-		logger.debug("Fetching Price for date range :{}-{}", start, end);
+		logger.debug("Fetching Price for date range :{} , {}", start, end);
 		List<Price> prices = new ArrayList<>();
 		try {
 			String content = content(configuration.getBitcoinApiEndpoint(), start, end);
