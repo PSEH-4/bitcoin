@@ -4,7 +4,7 @@ public class Error {
 
 	private String cause;
 	private int status;
-	private String possibleReason = "Make sure you have supplied correct currency / dates";
+	private String possibleReason = "Make sure you have supplied correct currency / dates in format [yyyy-MM-dd]";
 
 	public Error(String cause, int status) {
 		this.cause = cause;

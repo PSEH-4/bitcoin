@@ -9,53 +9,59 @@ import org.springframework.stereotype.Service;
 
 import com.sapient.bitcoin.bean.Currency;
 import com.sapient.bitcoin.bean.Price;
+import com.sapient.bitcoin.bean.Request;
 import com.sapient.bitcoin.bean.Response;
 import com.sapient.bitcoin.repository.BitcoinApiException;
 import com.sapient.bitcoin.repository.BitcoinPriceRepository;
-import com.sapient.bitcoin.repository.BitcoinRepositoryRestImpl;
 
 @Service
 public class BitcoinPriceServiceImpl implements BitcoinPriceService {
-	
-	Logger logger = LoggerFactory.getLogger(BitcoinPriceServiceImpl.class);
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BitcoinPriceServiceImpl.class);
 
 	@Autowired
 	private BitcoinPriceRepository bitcoinPriceRepository;
 
 	@Override
-	public Response fetchPrice(String start, String end,String targetCurrency){
-		logger.debug("Fetching currency data for startDate={},endDate={},currency={}",start,end,targetCurrency);
-		Currency currency;
-		List<Price> prices;
-		int highestIndex =0;
-		double highest =0;
-		int index =0;
+	public Response fetchPrice(Request request) {
+		LOGGER.debug("Fetching currency data for :{}", request);
+		Currency currency = null;
+		List<Price> prices = null;
+		
+		String targetCurrency = request.getCurrency();
+		String start = request.getStartDate();
+		String end = request.getEndDate();
 		try {
 			currency = bitcoinPriceRepository.getCurrency(targetCurrency);
 			prices = bitcoinPriceRepository.getPrice(start, end);
 		} catch (BitcoinApiException e) {
-			logger.error("Error while fetching price , caused by : {}",e.getMessage());
+			LOGGER.error("Error while fetching price , caused by : {}", e.getMessage());
 			throw e;
 		}
+		LOGGER.debug("converting price by currency conversion rate");
+		doConversion(currency, prices, targetCurrency);
+		Response response = new Response(targetCurrency,start,end,prices);
+		return response;
+	}
+
+	private void doConversion(Currency currency, List<Price> prices, String targetCurrency) {
 		double conversionRate = currency.getTarget() / currency.getUsd();
-		for(Price p:prices){
-			double price = Double.parseDouble(p.getPrice().toString())*conversionRate;
+		LOGGER.debug("conversion rate for currency :{} is {}",targetCurrency,conversionRate);
+		int highestIndex = 0;
+		double highest = 0;
+		int index = 0;
+		for (Price p : prices) {
+			double price = Double.parseDouble(p.getPrice().toString()) * conversionRate;
 			p.setPrice(Double.toString(price));
-			if(price>highest){
-				highestIndex=index;
-				highest=price;
+			if (price > highest) {
+				highestIndex = index;
+				highest = price;
 			}
 			index++;
 		}
 		Price highestPrice = prices.get(highestIndex);
-		highestPrice.setPrice(highestPrice.getPrice()+"(highest)");
+		highestPrice.setPrice(highestPrice.getPrice() + " (highest)");
 		prices.set(highestIndex, highestPrice);
-		Response response = new Response();
-		response.setCurrency(targetCurrency);
-		response.setStartDate(start);
-		response.setEndDate(end);
-		response.setPrices(prices);
-		return response;
 	}
 
 }
